@@ -1,0 +1,28 @@
+#!/bin/tcsh
+#PBS -P ad73
+#PBS -l walltime=10:00:00
+#PBS -q express
+#PBS -l mem=180GB
+#PBS -l jobfs=10GB
+#PBS -l ncpus=96
+#PBS -o outputD15_C1.20e-05_S80_B2.0_E0.05.out
+#PBS -e outputD15_C1.20e-05_S80_B2.0_E0.05.err
+#PBS -l storage=gdata/ad73+scratch/ad73
+#PBS -N Allfree
+#PBS -M z5329803@ad.unsw.edu.au
+#PBS -m ae
+#PBS -l software=y_program
+#PBS -l wd
+set executable="/g/data/ad73/codes/NEMO3D_other_copies/NEMO3D_Broyden/NEMO3D/nemo3d/bin/nemo3d-x86_64_intel20_64_openmpi_gadi.ex"
+echo $executable
+cd $PBS_O_WORKDIR
+set machinefile=`basename $PBS_NODEFILE`
+cp $PBS_NODEFILE machinefileD15_C1.20e-05_S80_B2.0_E0.05.txt
+module purge
+module load pbs
+module load intel-compiler/2020.0.166
+module load openmpi/4.0.2
+module load intel-mkl/2020.0.166
+set cmd="mpirun -np $PBS_NCPUS -machinefile machinefileD15_C1.20e-05_S80_B2.0_E0.05.txt $executable xml/QDBase_D15_nm_C1.20e-05_S80_B2.0_E0.05.xml"
+echo $cmd
+$cmd
